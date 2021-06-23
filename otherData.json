@@ -1,8 +1,4 @@
-
-      {
-    "name": "Super Shades",
-    "value": 100,
-    "children": [
+[
         {
           "name": "Red",
           "value": 50,
@@ -567,6 +563,4 @@
           ]
         }
       ]
-    }
 
-    

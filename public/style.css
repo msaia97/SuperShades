@@ -1,0 +1,11 @@
+.label {
+  font: 11px "Helvetica Neue", Helvetica, Arial, sans-serif;
+  text-anchor: middle;
+  text-shadow: 0 1px 0 white, 1px 0 0 white, -1px 0 0 white, 0 -1px 0 white;
+}
+
+.label,
+.node--root,
+.supers {
+  pointer-events: none;
+}
