@@ -12,93 +12,94 @@ let margin = 20,
     "Green",
   ];
 
-function color(){}
-// d3.scale
-//   .linear()
-//   .domain([-1, 1])
-//   .range(["red", "yellow", "green", "black", "purple"])
-  // .interpolate(d3.interpolateHcl);
-
+  
 let pack = d3.layout
-  .pack()
-  .padding(2)
-  .size([diameter - margin, diameter - margin])
-  .value(function (data) {
-    return data.size;
-  });
+.pack()
+.padding(2)
+.size([diameter - margin, diameter - margin])
+.value(function (data) {
+  return data.size;
+});
 
+// this is setting the canvas
 let svg = d3
-  .select("body")
-  .append("svg")
-  .attr("width", diameter)
-  .attr("height", diameter)
-  .append("g")
-  .attr("transform", "translate(" + diameter / 2 + "," + diameter / 2 + ")");
+.select("body")
+.append("svg")
+.attr("width", diameter)
+.attr("height", diameter)
+.append("g")
+.attr("transform", "translate(" + diameter / 2 + "," + diameter / 2 + ")");
 
-let root = getData();
-let mainColors = root.children
-console.log(mainColors)
+let pie = d3.layout.pie();
+// assigning the data to a variable 
+const root = getData();
 
-
+// turning the data into nodes
 let focus = root,
   nodes = pack.nodes(root),
   view;
 
-  // console.log(focus)
-
-let circle = svg
-  .selectAll("circle")
-  .data(nodes)
-  .enter()
-  .append("circle")
-  .attr("class", function (data) {
-    // console.log(data.children)
-    if(data.parent){
-      if(data.children){
-        return "main colors"
-      }else{
-        return "supers"
+// an array of all the super objects
+  let circle = svg
+    .selectAll("circle")
+    .data(nodes)
+    .enter()
+    .append("circle")
+    .attr("class", function (data) {
+      return data.name;
+    })
+    .style("fill", function (data) {
+      if (data.depth === 2) {
+        return data.second_color;
+      } else if (data.depth === 1) {
+        return data.name;
+      } else {
+        return "orange";
       }
-    }else{
-      return "node root"
-    }
-  })
-  // .style("fill", function (data) {
-  //   let keys = Object.keys(data)
-  //   let val = Object.values(data)
-  //   let colors = ["White", "Brown", "Yellow", "Purple", "Silver/Gray", "Black", "Red", "Blue", "Green"]
-  //   // console.log(val[0])
-  //   val.forEach(node => {
-  //     // console.log(node)
-  //     if(colors.includes(node)){
-  //       console.log(node)
-  //       return node.style("fill" )
-  //     }
-  //   })
-
-  //   // return data.children ? color(data.depth) : null;
-  // })
-  .on("click", function (data) {
-    if (focus !== data) zoom(data), d3.event.stopPropagation();
-  });
-
-  let nodeRoot = svg
-    .selectAll("circle.root")
-    .style("fill", "red")
-
-  let colorCategory = svg
-    .selectAll("circle.main")
-    .style("fill", "yellow")
-
-  let superCol = svg
-    .selectAll("circle.supers")
-    .style("fill", "white")
-
-  console.log(circle)
-
-  circle.forEach(x => {
-    console.log(x)
-  })
+    })
+    // .style("fill", function (data) {
+    //   if (data.depth === 2) {
+    //     return data.main_color;
+    //   } else if (data.depth === 1) {
+    //     return data.name;
+    //   } else {
+    //     return "orange";
+    //   }
+    // })
+    // .style("background-image", function(data){
+    //   // console.log(data)
+    //   if(data.depth === 2){
+    //     return `linear-gradient(to right, ${data.second_color})`
+    //   }
+    // })
+    .style("opacity", function(data){
+      if(data.depth !== 2){
+        return .6
+      }
+    })
+    .style("stroke", function(data){
+      if(data.depth === 2){
+        if(data.type === "hero"){
+          return "blue"
+        }else{
+          return "red"
+        }
+      }else{
+        return "black"
+      }
+      console.log(data)
+    })
+    .style("stroke-width", function(data){
+      if(data.depth === 2){
+        return 4
+      }else{
+        return 2
+      }
+    })
+    .style("stroke-opacity", "0.65")
+    .on("click", function (data) {
+      if (focus !== data) zoom(data), d3.event.stopPropagation();
+    });
 
 let text = svg
   .selectAll("text")
@@ -119,27 +120,67 @@ let text = svg
   // console.log(text);
 let node = svg.selectAll("circle,text");
 
-// console.log(node[0]);
-// console.log(node[0][73]);
-// console.log()
+// zoom functionality
+// d3.select("body")
+//   .style("background", color(-1))
+//   .style("background", color(-1))
+//   .on("click", function () {
+//     zoom(root);
+//   });
 
-d3.select("body")
-  // .style("background", color(-1))
-  .style("background", color(-1))
-  .on("click", function () {
-    zoom(root);
+zoomTo([root.x, root.y, root.r * 2 + margin]);
+
+function zoom(data) {
+  let focus0 = focus;
+  focus = data;
+
+  let transition = d3
+    .transition()
+    .duration(d3.event.altKey ? 7500 : 750)
+    .tween("zoom", function (data) {
+      let i = d3.interpolateZoom(view, [
+        focus.x,
+        focus.y,
+        focus.r * 2 + margin,
+      ]);
+      return function (t) {
+        zoomTo(i(t));
+      };
+    });
+
+  transition
+    .selectAll("text")
+    .filter(function (data) {
+      return data.parent === focus || this.style.display === "inline";
+    })
+    .style("fill-opacity", function (data) {
+      return data.parent === focus ? 1 : 0;
+    })
+    .each("start", function (data) {
+      if (data.parent === focus) this.style.display = "inline";
+    })
+    .each("end", function (data) {
+      if (data.parent !== focus) this.style.display = "none";
+    });
+}
+function zoomTo(v) {
+  let k = diameter / v[2];
+  view = v;
+  node.attr("transform", function (data) {
+    return "translate(" + (data.x - v[0]) * k + "," + (data.y - v[1]) * k + ")";
   });
-
+  circle.attr("r", function (data) {
+    return data.r * k;
+  });
+}
 
 function getData(){
   return {
     name: "Super Shades",
-    value: 100,
     children:
      [
       {
         name: "Red",
-        value: 50,
         children: [
           {
             name: "Ant Man",
@@ -242,7 +283,6 @@ function getData(){
 
       {
         name: "Yellow",
-        value: 50,
         children: [
           {
             name: "Ancient One",
@@ -273,7 +313,6 @@ function getData(){
 
       {
         name: "Green",
-        value: 50,
         children: [
           {
             name: "Abomination",
@@ -400,7 +439,6 @@ function getData(){
 
       {
         name: "Blue",
-        value: 50,
         children: [
           {
             name: "Apocalypse",
@@ -503,7 +541,6 @@ function getData(){
 
       {
         name: "Black",
-        value: 50,
         children: [
           {
             name: "Black Cat",
@@ -591,7 +628,6 @@ function getData(){
 
       {
         name: "White",
-        value: 50,
         children: [
           {
             name: "Angel",
@@ -614,7 +650,6 @@ function getData(){
 
       {
         name: "Purple",
-        value: 50,
         children: [
           {
             name: "Baron Zemo",
@@ -644,8 +679,7 @@ function getData(){
       },
 
       {
-        name: "Silver/Gray",
-        value: 50,
+        name: "Silver",
         children: [
           {
             name: "Colossus",
@@ -684,7 +718,6 @@ function getData(){
 
       {
         name: "Brown",
-        value: 50,
         children: [
           {
             name: "Groot",
@@ -704,7 +737,8 @@ function getData(){
           },
         ],
       },
-    ],
+    ]
+  // )
   }; // end of object
 } //end of function
 
