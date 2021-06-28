@@ -5,7 +5,7 @@ let margin = 20,
     "Brown",
     "Yellow",
     "Purple",
-    "Silver/Gray",
+    "Silver",
     "Black",
     "Red",
     "Blue",
@@ -28,7 +28,7 @@ let svg = d3
 .attr("width", diameter)
 .attr("height", diameter)
 .append("g")
-.attr("transform", "translate(" + diameter / 2 + "," + diameter / 2 + ")");
+.attr("transform", "translate(" + diameter / 2 + "," + diameter / 2 + ")")
 
 let pie = d3.layout.pie();
 // assigning the data to a variable 
@@ -57,21 +57,6 @@ let focus = root,
         return "orange";
       }
     })
-    // .style("fill", function (data) {
-    //   if (data.depth === 2) {
-    //     return data.main_color;
-    //   } else if (data.depth === 1) {
-    //     return data.name;
-    //   } else {
-    //     return "orange";
-    //   }
-    // })
-    // .style("background-image", function(data){
-    //   // console.log(data)
-    //   if(data.depth === 2){
-    //     return `linear-gradient(to right, ${data.second_color})`
-    //   }
-    // })
     .style("opacity", function(data){
       if(data.depth !== 2){
         return .6
@@ -87,7 +72,6 @@ let focus = root,
       }else{
         return "black"
       }
-      console.log(data)
     })
     .style("stroke-width", function(data){
       if(data.depth === 2){
@@ -99,7 +83,7 @@ let focus = root,
     .style("stroke-opacity", "0.65")
     .on("click", function (data) {
       if (focus !== data) zoom(data), d3.event.stopPropagation();
-    });
+    })
 
 let text = svg
   .selectAll("text")
@@ -115,18 +99,47 @@ let text = svg
   })
   .text(function (data) {
     return data.name;
-  });
+  })
 
-  // console.log(text);
+let description = svg
+  .selectAll("description")
+  .data(nodes)
+  .enter()
+  .append("description")
+  .attr("class", "description")
+  .text(function (data) {
+    if(data.depth === 2){
+      return data.third_color;
+    }
+    // console.log(data);
+  });
+  
+  // console.log(inner)
 let node = svg.selectAll("circle,text");
+
+let title = svg
+  .selectAll("text.label")
+  .style("fill", function(data){
+    if(colors.includes(data.name)){
+      return "white"
+    }else if(data.depth === 2){
+      if (
+        data.second_color === "black" ||
+        data.second_color === "" ||
+        data.second_color === "purple"
+      ) {
+        return "white";
+      }
+    }
+  })
 
 // zoom functionality
 // d3.select("body")
-//   .style("background", color(-1))
-//   .style("background", color(-1))
-//   .on("click", function () {
-//     zoom(root);
-//   });
+  // .style("background", color(-1))
+  // .style("background", color(-1))
+  // .on("click", function () {
+  //   zoom(root);
+  // });
 
 zoomTo([root.x, root.y, root.r * 2 + margin]);
 

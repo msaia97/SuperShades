@@ -1,11 +1,4 @@
-.Green{
-  fill: green;
-}
-
-circle.Super.Shades {
-  fill: orange;
-}
-
-html{
-  background: 'marvelBg.png'
+.label{
+  /* color: red; */
+  text-align: center;
 }
