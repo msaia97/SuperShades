@@ -5,14 +5,32 @@
     <meta charset="utf-8">
     <title>Super Shades</title>
     <script src="https://d3js.org/d3.v3.min.js"></script>
-    <style rel="stylesheet"  type="text/css" href="style.css"></style>
+    <link rel="stylesheet"  type="text/css" href="./public/style.css">
+    <link rel="stylesheet" href="./public/modal.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Marvel:wght@700&display=swap" rel="stylesheet">
+    <script src="modal.js"></script>
 </head>
 <h1>Super Shades</h1>
 
 <body>
-    <!-- <img src="marvelBg.png"> -->
     <main id='main'></main>
-    <script type="text/javascript" src="bubble.js"></script>
+    <script class="svg-bubble" type="text/javascript" src="bubble.js"></script>
+     <div class="modal is-open"> 
+            <div class="modal-text">
+                <h1 class="modal-title">Super Shades</h1>
+                <p class='middle-text'>This is a data visualization of Marvel supers and their primary costume color. 
+                    The group they are in are their main colors, the color showing is the secondary color if any. 
+                    Each character bubble is outlined with either red or blue depending on if the character is a villain or hero.
+                </p>
+                <br>
+
+                <button class="modal-close">POW!</button>
+            </div>
+        
+            <div class="modal-screen"></div>
+        </div>
 </body>
 
 </html>

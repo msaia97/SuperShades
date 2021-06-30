@@ -12,7 +12,7 @@ let margin = 20,
     "Green",
   ];
 
-  
+ function color(){} 
 let pack = d3.layout
 .pack()
 .padding(2)
@@ -84,6 +84,7 @@ let focus = root,
     .on("click", function (data) {
       if (focus !== data) zoom(data), d3.event.stopPropagation();
     })
+   
 
 let text = svg
   .selectAll("text")
@@ -100,6 +101,7 @@ let text = svg
   .text(function (data) {
     return data.name;
   })
+  .style("font-family", "'Marvel', sans-serif")
 
 let description = svg
   .selectAll("description")
@@ -133,13 +135,17 @@ let title = svg
     }
   })
 
+// let mainCirc = svg
+//   .selectAll("circle.Super.Shades")
+//   .style("background-image", "marvelBg.png")
+
 // zoom functionality
-// d3.select("body")
-  // .style("background", color(-1))
-  // .style("background", color(-1))
-  // .on("click", function () {
-  //   zoom(root);
-  // });
+d3.select("body")
+  .style("background", color(-1))
+  .style("background", color(-1))
+  .on("click", function () {
+    zoom(root);
+  });
 
 zoomTo([root.x, root.y, root.r * 2 + margin]);
 
@@ -178,6 +184,7 @@ function zoom(data) {
 }
 function zoomTo(v) {
   let k = diameter / v[2];
+  // console.log(k)
   view = v;
   node.attr("transform", function (data) {
     return "translate(" + (data.x - v[0]) * k + "," + (data.y - v[1]) * k + ")";
@@ -202,6 +209,10 @@ function getData(){
             third_color: "",
             type: "hero",
             size: 20,
+            // children: [
+            //   {primary: "red"},
+            //   {secondary: "silver"}
+            // ]
           },
           {
             name: "Daredevil",

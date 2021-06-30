@@ -1,0 +1,72 @@
+.modal {
+  display: none;
+}
+
+.is-open {
+  display: block;
+}
+
+.modal-screen {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 2;
+  background: url("marvelBg.png");
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+.modal-text {
+  position: absolute;
+  left: 50%;
+  top: 40%;
+  transform: translate(-50%, -50%);
+  z-index: 3;
+  color: orange;
+  background: rgba(0, 0, 0, 0.6);
+  border-radius: 15px;
+  padding: 20px;
+  text-align: center;
+}
+
+.modal-title {
+font-family: 'Marvel', sans-serif;
+  font-size: 65px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  color: orange;  
+  text-shadow: 4px 2px #000000;
+  margin-top: auto;
+}
+
+.middle-text {
+  font-family: 'Marvel', sans-serif;
+  font-size: 24px;
+  padding: 0px 20px;
+  line-height: 22px;
+  letter-spacing: 1px;
+  margin-bottom: 20px;
+}
+
+.modal-close {
+  border: none;
+  color: white;
+  background-color:orange;
+  border: 1px solid transparent;
+  border-radius: 25px;
+  padding: 12px;
+  font-family: 'Marvel', sans-serif;
+  font-size: 22px;
+  font-weight: bold;
+  transition: all .6s ease;
+  margin-top: 20px;
+  width: 30%;
+  letter-spacing: 1px;
+}
+
+.modal-close:hover{
+  background: red;
+  color: orange;
+}

@@ -1,4 +1,26 @@
-.label{
-  /* color: red; */
+body{
+  background: url("./superEffect.png");
+  background-color: red;
+    /* background-size: cover;
+  background-repeat: no-repeat; */
+}
+body h1{
+  font-family: 'Marvel', sans-serif;
   text-align: center;
+  font-size: 50px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  color: orange;  
+  background: rgba(0, 0, 0, 0.6);
+  margin-right: 40%;
+  margin-left: 40%;
+  text-shadow: 4px 2px #000000;
+  border-radius: 73%;
+}
+
+body svg{
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  /* width: 40%; */
 }
