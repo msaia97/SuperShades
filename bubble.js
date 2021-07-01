@@ -39,84 +39,82 @@ let focus = root,
   nodes = pack.nodes(root),
   view;
 
-// an array of all the super objects
+  
+  // an array of all the super objects
   let circle = svg
-    .selectAll("circle")
-    .data(nodes)
-    .enter()
-    .append("circle")
-    .attr("class", function (data) {
+  .selectAll("circle")
+  .data(nodes)
+  .enter()
+  .append("circle")
+  .attr("class", function (data) {
+    return data.name;
+  })
+  .style("fill", function (data) {
+    if (data.depth === 2) {
+      return data.second_color;
+    } else if (data.depth === 1) {
       return data.name;
-    })
-    .style("fill", function (data) {
-      if (data.depth === 2) {
-        return data.second_color;
-      } else if (data.depth === 1) {
-        return data.name;
-      } else {
-        return "orange";
-      }
-    })
-    .style("opacity", function(data){
-      if(data.depth !== 2){
-        return .6
-      }
-    })
-    .style("stroke", function(data){
-      if(data.depth === 2){
-        if(data.type === "hero"){
-          return "blue"
-        }else{
-          return "red"
-        }
+    } else {
+      return "orange";
+    }
+  })
+  .style("opacity", function(data){
+    if(data.depth !== 2){
+      return .6
+    }
+  })
+  .style("stroke", function(data){
+    if(data.depth === 2){
+      if(data.type === "hero"){
+        return "blue"
       }else{
-        return "black"
+        return "red"
       }
-    })
-    .style("stroke-width", function(data){
-      if(data.depth === 2){
-        return 4
-      }else{
-        return 2
-      }
-    })
-    .style("stroke-opacity", "0.65")
-    .on("click", function (data) {
-      if (focus !== data) zoom(data), d3.event.stopPropagation();
-    })
-   
+    }else{
+      return "black"
+    }
+  })
+  .style("stroke-width", function(data){
+    if(data.depth === 2){
+      return 4
+    }else{
+      return 2
+    }
+  })
+  .style("stroke-opacity", "0.65")
+  .on("click", function (data) {
+        if (focus !== data && !colors.includes(data.name)){
+          zoom(data.parent), d3.event.stopPropagation();
+        // zoomTo([root.x, root.y, root.r * 2 + margin]);
 
-let text = svg
+        }else if(focus !== data){
+          zoom(data), d3.event.stopPropagation();
+        }else{
+          zoom(root), d3.event.stopPropagation();
+        }
+      })
+  
+      
+  let text = svg
   .selectAll("text")
   .data(nodes)
   .enter()
   .append("text")
   .attr("class", "label")
   .style("fill-opacity", function (data) {
-    return data.parent === root ? 1 : 0;
+      return data.parent === root ? 1 : 0;
   })
   .style("display", function (data) {
-    return data.parent === root ? null : "none";
+      return data.parent === root ? "box" : "none";
   })
   .text(function (data) {
     return data.name;
   })
   .style("font-family", "'Marvel', sans-serif")
+  .style("font-size", "19px")
+  .style("font-weight", "bold")
 
-let description = svg
-  .selectAll("description")
-  .data(nodes)
-  .enter()
-  .append("description")
-  .attr("class", "description")
-  .text(function (data) {
-    if(data.depth === 2){
-      return data.third_color;
-    }
-    // console.log(data);
-  });
-  
-  // console.log(inner)
+
 let node = svg.selectAll("circle,text");
 
 let title = svg
@@ -135,9 +133,6 @@ let title = svg
     }
   })
 
-// let mainCirc = svg
-//   .selectAll("circle.Super.Shades")
-//   .style("background-image", "marvelBg.png")
 
 // zoom functionality
 d3.select("body")
@@ -152,7 +147,7 @@ zoomTo([root.x, root.y, root.r * 2 + margin]);
 function zoom(data) {
   let focus0 = focus;
   focus = data;
-
+  // console.log(focus0)
   let transition = d3
     .transition()
     .duration(d3.event.altKey ? 7500 : 750)
@@ -163,6 +158,7 @@ function zoom(data) {
         focus.r * 2 + margin,
       ]);
       return function (t) {
+        // console.log(t)
         zoomTo(i(t));
       };
     });
@@ -182,9 +178,10 @@ function zoom(data) {
       if (data.parent !== focus) this.style.display = "none";
     });
 }
+
 function zoomTo(v) {
   let k = diameter / v[2];
-  // console.log(k)
+  // console.log(v) array of coordinates
   view = v;
   node.attr("transform", function (data) {
     return "translate(" + (data.x - v[0]) * k + "," + (data.y - v[1]) * k + ")";
