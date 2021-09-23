@@ -83,8 +83,19 @@ let focus = root,
   })
   .style("stroke-opacity", "0.65")
   .on("click", function (data) {
+    // focus = where you were or where you want to go can check i f depth 0
+    // data is what you are acrually clicking on and
+    // colors is an array of colors to check against depth 1 data
+    // console.log("DATA", data, "focus", focus, "COLORS", colors)
         if (focus !== data && !colors.includes(data.name)){
-          zoom(data.parent), d3.event.stopPropagation();
+          // the super bubbles
+          // console.log(data.name)
+          if(focus.depth === 1){
+            zoom(root), d3.event.stopPropagation();
+          }else{
+            zoom(data.parent), d3.event.stopPropagation();
+
+          }
         // zoomTo([root.x, root.y, root.r * 2 + margin]);
 
         }else if(focus !== data){
@@ -145,9 +156,10 @@ d3.select("body")
 zoomTo([root.x, root.y, root.r * 2 + margin]);
 
 function zoom(data) {
+  // console.log(data, "REEEE", window)
   let focus0 = focus;
-  focus = data;
-  // console.log(focus0)
+  focus = data || {};
+  // console.log(focus)
   let transition = d3
     .transition()
     .duration(d3.event.altKey ? 7500 : 750)
@@ -181,9 +193,10 @@ function zoom(data) {
 
 function zoomTo(v) {
   let k = diameter / v[2];
-  // console.log(v) array of coordinates
+  // console.log(v) //array of coordinates
   view = v;
   node.attr("transform", function (data) {
+    // console.log(data)
     return "translate(" + (data.x - v[0]) * k + "," + (data.y - v[1]) * k + ")";
   });
   circle.attr("r", function (data) {
