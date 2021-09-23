@@ -22,3 +22,37 @@ body svg{
   margin-right: auto;
   /* width: 40%; */
 }
+
+.key{
+  float: left;
+  padding: 10px;
+  /* opacity: .75; */
+  margin-left: 5%;
+}
+
+.key ul li{
+  border-radius: 5px;
+  background-color: orange;
+  color:#000000;
+  font-weight: bold;
+  font-size: 18px;
+  font-family: 'Marvel', sans-serif;
+  padding: 10px;
+}
+
+.villain-key{
+  border: 4px red solid;
+}
+.hero-key{
+  border: 4px blue solid;
+}
+
+.key-child{
+  border: 4px solid black;
+  /* border-bottom: 4px solid black; */
+}
+
+.key-parent{
+  border-left: 4px solid black;
+  border-right: 4px solid black;
+}

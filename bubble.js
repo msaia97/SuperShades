@@ -42,68 +42,65 @@ let focus = root,
   
   // an array of all the super objects
   let circle = svg
-  .selectAll("circle")
-  .data(nodes)
-  .enter()
-  .append("circle")
-  .attr("class", function (data) {
-    return data.name;
-  })
-  .style("fill", function (data) {
-    if (data.depth === 2) {
-      return data.second_color;
-    } else if (data.depth === 1) {
+    .selectAll("circle")
+    .data(nodes)
+    .enter()
+    .append("circle")
+    .attr("class", function (data) {
       return data.name;
-    } else {
-      return "orange";
-    }
-  })
-  .style("opacity", function(data){
-    if(data.depth !== 2){
-      return .6
-    }
-  })
-  .style("stroke", function(data){
-    if(data.depth === 2){
-      if(data.type === "hero"){
-        return "blue"
-      }else{
-        return "red"
+    })
+    .style("fill", function (data) {
+      if (data.depth === 2) {
+        return data.second_color;
+      } else if (data.depth === 1) {
+        return data.name;
+      } else {
+        return "orange";
       }
-    }else{
-      return "black"
-    }
-  })
-  .style("stroke-width", function(data){
-    if(data.depth === 2){
-      return 4
-    }else{
-      return 2
-    }
-  })
-  .style("stroke-opacity", "0.65")
-  .on("click", function (data) {
-    // focus = where you were or where you want to go can check i f depth 0
-    // data is what you are acrually clicking on and
-    // colors is an array of colors to check against depth 1 data
-    // console.log("DATA", data, "focus", focus, "COLORS", colors)
-        if (focus !== data && !colors.includes(data.name)){
-          // the super bubbles
-          // console.log(data.name)
-          if(focus.depth === 1){
-            zoom(root), d3.event.stopPropagation();
-          }else{
-            zoom(data.parent), d3.event.stopPropagation();
-
-          }
-        // zoomTo([root.x, root.y, root.r * 2 + margin]);
-
-        }else if(focus !== data){
-          zoom(data), d3.event.stopPropagation();
-        }else{
-          zoom(root), d3.event.stopPropagation();
+    })
+    .style("opacity", function (data) {
+      if (data.depth !== 2) {
+        return 0.6;
+      }
+    })
+    .style("border", "1px solid black")
+    .style("stroke", function (data) {
+      if (data.depth === 2) {
+        if (data.type === "hero") {
+          return "blue";
+        } else {
+          return "red";
         }
-      })
+      } else {
+        return "black";
+      }
+    })
+    .style("stroke-width", function (data) {
+      if (data.depth === 2) {
+        return 7;
+      } else {
+        return 2;
+      }
+    })
+    .style("stroke-opacity", "0.65")
+    .on("click", function (data) {
+      if (focus !== data && !colors.includes(data.name)) {
+        if (focus.depth === 1) {
+          zoom(root), d3.event.stopPropagation();
+        } else {
+          zoom(data.parent), d3.event.stopPropagation();
+        }
+      } else if (focus !== data) {
+        zoom(data), d3.event.stopPropagation();
+      } else {
+        zoom(root), d3.event.stopPropagation();
+      }
+    })
+    // .style("border-width", function (data) {
+    //   if (data.depth === 2) {
+    //     return 8
+    //   }
+    // });
   
       
   let text = svg
