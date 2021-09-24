@@ -56,3 +56,56 @@ body svg{
   border-left: 4px solid black;
   border-right: 4px solid black;
 }
+
+.header{
+    display: flex;
+    /* justify-content: center; */
+    float: right;
+    margin-bottom: 10px;
+    /* margin-left: 13%; */
+  background-color:orange;
+}
+
+.logo-wrapper{ 
+  flex-direction: row; 
+}
+.logo-wrapper ul{ 
+  display: flex;
+  flex-direction: row; 
+  background-color:orange;
+  }
+  
+  .logo-container{
+       height: 90px;
+    width: 200px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    position: relative;
+    margin-right: 20px;
+    background-color: orange;
+}
+
+
+
+.logo-container li{
+    justify-content: center;
+}
+
+.logo-wrapper{
+  max-height: 70px;
+}
+
+.linkedin-logo-img{
+   width: 75px;
+    height: 75px;
+}
+.git-logo-img{
+    width: 75px;
+    height: 75px;
+}
+.angel-logo-img{
+    width: 75px;
+    height: 75px;
+}
+
